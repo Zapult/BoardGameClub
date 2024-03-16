@@ -52,10 +52,10 @@ def new_loan(request):
                 if game.loaned:
                     messages.error(request, f"The game {game.name} is already loaned!")
                 else:
-                    game.loaned = True
-                    game.save()
                     loan = Loan(user=user, game=game)
                     loan.save()
+                    game.loaned = True
+                    game.save()
                     messages.success(request, f"You have succesfully borrowed {game.name}. Your current loans: {user_loan_count} games loaned.")
                     return redirect('board_games:index')
 
