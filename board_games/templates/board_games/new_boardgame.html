@@ -5,7 +5,7 @@
 
 <form action="{% url 'board_games:new_boardgame' %}" method='post'>
 {% csrf_token %}
-{{ form.as_div }}
+{{ form.as_p }}
 <button name="submit">Add boardgame</button>
 </form>
 

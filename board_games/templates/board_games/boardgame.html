@@ -1,4 +1,7 @@
 {% extends 'board_games/base.html' %}
 {% block content %}
-<p>Boardgame: {{ boardgame.name }}</p>
+<h2>{{ boardgame.name }}</h2>
+<p>Description: {{ boardgame.description }}</p>
+<p>Year Published: {{ boardgame.year }}</p>
+<p>Loaned: {% if boardgame.loaned %} Yes {% else %} No {% endif %}</p>
 {% endblock content %}

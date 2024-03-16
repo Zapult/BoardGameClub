@@ -7,4 +7,5 @@ urlpatterns = [
     path('boardgames/', views.boardgames, name='boardgames'),
     path('boardgames/<int:boardgame_id>/', views.boardgame, name='boardgame'),
     path('new_boardgame/', views.new_boardgame, name='new_boardgame'),
+    path('new_loan/', views.new_loan, name='new_loan'),
 ]
