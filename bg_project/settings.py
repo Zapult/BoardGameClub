@@ -33,6 +33,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     #My apps
     'board_games',
+    'accounts',
 
     #Default django apps
     'django.contrib.admin',
@@ -125,3 +126,7 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+LOGIN_REDIRECT_URL = 'board_games:index'
+LOGOUT_REDIRECT_URL = 'board_games:index'
+LOGIN_URL = 'accounts:login'
