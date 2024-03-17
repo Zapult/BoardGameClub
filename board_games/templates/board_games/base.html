@@ -1,74 +1,126 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Board Game</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Board Game Club</title>
 
-  {% load django_bootstrap5 %}
-  {% bootstrap_css %}
-  {% bootstrap_javascript %}
+    {% load django_bootstrap5 %}
+    {% bootstrap_css %}
 
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto&display=swap">
+
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f0f8ff;
+            color: #333;
+        }
+
+        body.dark-mode {
+            background-color: #333;
+            color: #fff;
+        }
+
+        .navbar {
+            background-color: #fff;
+            border-bottom: 2px solid #ccc;
+        }
+
+        .navbar-brand {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .navbar-nav .nav-link {
+            color: #333;
+        }
+
+        .container {
+            padding-top: 20px;
+            padding-bottom: 20px;
+        }
+
+        #darkModeToggle {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+        }
+    </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-md navbar-light bg-light mb-4 border">
-      <div class="container-fluid">
-        <a class="navbar-brand" href="{% url 'board_games:index' %}">
-            Board Games</a>
-  
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-          data-bs-target="#navbarCollapse" aria-controls="navbarCollapse"
-          aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-  
-        <div class="collapse navbar-collapse" id="navbarCollapse">
-          <ul class="navbar-nav me-auto mb-2 mb-md-0">
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'board_games:boardgames' %}">
-                Games</a></li>
-          </ul> <!-- End of links on left side of navbar -->
-  
-          <!-- Account-related links -->
-          <ul class="navbar-nav ms-auto mb-2 mb-md-0">
-  
-            {% if user.is_authenticated %}
-              <li class="nav-item">
-                <span class="navbar-text me-2">Hello, {{ user.username }}.
-                  </span></li>
-            {% else %}
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'accounts:register' %}">
-                    Register</a></li>
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'accounts:login' %}">
-                    Log in</a></li>
-            {% endif %}
-  
-          </ul> <!-- End of account-related links -->
-  
-          {% if user.is_authenticated %}
-            <form action="{% url 'accounts:logout' %}" method='post'>
-              {% csrf_token %}
-              <button name='submit' class='btn btn-outline-secondary btn-sm'>
-                Log out</button>
-            </form>
-          {% endif %}
-  
-        </div> <!-- Closes collapsible parts of navbar -->
-  
-      </div> <!-- Closes navbar's container -->
-    </nav> <!-- End of navbar -->
-  
+    <nav class="navbar navbar-expand-md navbar-light">
+        <div class="container">
+            <a class="navbar-brand me-auto" href="{% url 'board_games:index' %}">
+                Board Game Club
+            </a>
+    
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarCollapse" aria-controls="navbarCollapse"
+                aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+    
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <ul class="navbar-nav mx-auto mb-2 mb-md-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'board_games:boardgames' %}">BoardGames</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'board_games:loaned_games' %}">Loaned Games</a>
+                    </li>
+                </ul>
+                
+                {% if user.is_authenticated %}
+                    <span class="navbar-text me-2">Hello, {{ user.username }}.</span>
+                    <form action="{% url 'accounts:logout' %}" method='post'>
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-outline-secondary btn-sm">Log out</button>
+                    </form>
+                {% else %}
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'accounts:register' %}">Register</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'accounts:login' %}">Log in</a>
+                        </li>
+                    </ul>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+    
+
+    <button id="darkModeToggle" class="btn btn-outline-primary btn-sm">
+        Dark Mode
+    </button>
+
     <main class="container">
-      <div class="pb-2 mb-2 border-bottom">
-        {% block page_header %}{% endblock page_header %}
-      </div>
-  
-      <div>
-        {% block content %}{% endblock content %}
-      </div>
+        <div class="pb-4 mb-4 border-bottom">
+            {% block page_header %}{% endblock %}
+        </div>
+
+        <div>
+            {% block content %}{% endblock %}
+        </div>
     </main>
-  
-  </body>
-  </html>
+
+    {% bootstrap_javascript %}
+    
+    <script>
+        function toggleDarkMode() {
+            const body = document.body;
+            body.classList.toggle('dark-mode');
+            localStorage.setItem('darkMode', body.classList.contains('dark-mode'));
+        }
+
+        const darkModePref = localStorage.getItem('darkMode');
+        if (darkModePref === 'true') {
+            document.body.classList.add('dark-mode');
+        }
+
+        document.getElementById('darkModeToggle').addEventListener('click', toggleDarkMode);
+    </script>
+</body>
+</html>

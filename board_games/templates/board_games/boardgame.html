@@ -1,7 +1,66 @@
 {% extends 'board_games/base.html' %}
+
 {% block content %}
-<h2>{{ boardgame.name }}</h2>
-<p>Description: {{ boardgame.description }}</p>
-<p>Year Published: {{ boardgame.year }}</p>
-<p>Loaned: {% if boardgame.loaned %} Yes {% else %} No {% endif %}</p>
-{% endblock content %}
+<div class="container">
+    <div class="row">
+        <div class="col-lg-8">
+            <h2>{{ boardgame.name }}</h2>
+            <p class="lead">Description: {{ boardgame.description }}</p>
+            <p>Year Published: {{ boardgame.year }}</p>
+            <p>Loaned: {% if boardgame.loaned %} Yes {% else %} No {% endif %}</p>
+            {% if user.is_authenticated %}
+                <form id="loanForm" action="{% url 'board_games:new_loan' %}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="game_id" value="{{ boardgame.id }}">
+                    <button type="submit" class="btn btn-primary">Loan this game</button>
+                </form>
+            {% else %}
+                <p>Please <a href="{% url 'accounts:login' %}">log in</a> to loan this game.</p>
+            {% endif %}
+        </div>
+        <div class="col-lg-4">
+            {% if boardgame.image %}
+                <img src="{{ boardgame.image.url }}" alt="{{ boardgame.name }}" class="img-fluid">
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<div id="loanSuccessDialog" class="modal fade" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Success!</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>You have successfully loaned the game "{{ boardgame.name }}".</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">OK</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function showLoanSuccessDialog() {
+    $('#loanSuccessDialog').modal('show');
+  }
+
+  $('#loanForm').submit(function(event) {
+    event.preventDefault();
+    $.ajax({
+      url: $(this).attr('action'),
+      type: $(this).attr('method'),
+      data: $(this).serialize(),
+      success: function(response) {
+        showLoanSuccessDialog();
+      },
+      error: function(xhr, status, error) {
+        console.error(error);
+      }
+    });
+  });
+</script>
+{% endblock %}

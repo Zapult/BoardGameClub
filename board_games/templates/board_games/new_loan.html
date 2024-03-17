@@ -1,19 +1,28 @@
 {% extends 'board_games/base.html' %}
-{% block content %}
-<p>Loan a game</p>
 
-{% if user.is_authenticated %}
-<form action="{% url 'board_games:new_loan' %}" method='post'>
-{% csrf_token %}
-<label for="game">Select a game to loan:</label>
-<select name="game" id="game">
-{% for game in boardgames %}
-<option value="{{ game.id }}">{{ game.name }}</option>
-{% endfor %}
-</select>
-<button type="submit">Loan this game</button>
-</form>
-{% else %}
-<p>Please log in to loan a game.</p>
-{% endif %}
-{% endblock content %}
+{% block content %}
+<div class="container">
+    <h2 class="mb-4">Loan a Game</h2>
+
+    {% if user.is_authenticated %}
+        <form action="{% url 'board_games:new_loan' %}" method="post">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="game" class="form-label">Select a game to loan:</label>
+                <select name="game" id="game" class="form-select">
+                    {% for game in boardgames %}
+                        <option value="{{ game.id }}">{{ game.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="loan_date" class="form-label">Loan Date:</label>
+                <input type="date" name="loan_date" id="loan_date" class="form-control">
+            </div>
+            <button type="submit" class="btn btn-primary">Loan this Game</button>
+        </form>
+    {% else %}
+        <p>Please <a href="{% url 'accounts:login' %}">log in</a> to loan a game.</p>
+    {% endif %}
+</div>
+{% endblock %}

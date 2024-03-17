@@ -62,3 +62,8 @@ def new_loan(request):
     else:
         form = LoanForm()
     return render(request, 'board_games/new_loan.html', {'form': form, 'boardgames': boardgames})
+
+@login_required
+def loaned_games(request):
+    loaned_games = Loan.objects.filter(user=request.user)
+    return render(request, 'board_games/loaned_games.html', {'loaned_games': loaned_games})

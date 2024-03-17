@@ -4,7 +4,7 @@ from .models import BoardGame, Loan
 class BoardgameForm(forms.ModelForm):
     class Meta:
         model = BoardGame
-        fields = ['name', 'description', 'year']
+        fields = ['name', 'description', 'year', 'image']
         labels = {'name': '', 'description': '', 'year': ''}
 
 class LoanForm(forms.ModelForm):

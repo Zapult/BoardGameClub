@@ -1,0 +1,32 @@
+{% extends 'board_games/base.html' %}
+
+{% block content %}
+<p class="h3">Loan History</p>
+
+{% if loaned_games %}
+  <div class="accordion" id="loanHistoryAccordion">
+    {% for user, loans in loaned_games.items %}
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="heading{{ user.id }}">
+          <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ user.id }}" aria-expanded="true" aria-controls="collapse{{ user.id }}">
+            {{ user.username }}
+          </button>
+        </h2>
+        <div id="collapse{{ user.id }}" class="accordion-collapse collapse" aria-labelledby="heading{{ user.id }}" data-bs-parent="#loanHistoryAccordion">
+          <div class="accordion-body">
+            <ul>
+              {% for loan in loans %}
+                <li>{{ loan.game.name }} - Loaned on: {{ loan.loan_date }}</li>
+              {% empty %}
+                <li>No games currently loaned.</li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+{% else %}
+  <p>No loan history available.</p>
+{% endif %}
+{% endblock %}

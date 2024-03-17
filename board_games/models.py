@@ -5,6 +5,7 @@ class BoardGame(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField()
     year = models.IntegerField()
+    image = models.ImageField(upload_to='boardgame_images/', null=True, blank=True)
 
     class Meta:
         verbose_name_plural = 'boardgames'

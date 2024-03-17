@@ -1,12 +1,15 @@
 {% extends 'board_games/base.html' %}
 
 {% block content %}
-<p>Add a new boardgame:</p>
+    <h2>Add a New Board Game</h2>
 
-<form action="{% url 'board_games:new_boardgame' %}" method='post'>
-{% csrf_token %}
-{{ form.as_p }}
-<button name="submit">Add boardgame</button>
-</form>
-
-{% endblock content %}
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <div class="form-group">
+            <label for="id_image">Image:</label>
+            <input type="file" name="image" class="form-control-file" id="id_image">
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+{% endblock %}

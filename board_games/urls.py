@@ -8,4 +8,5 @@ urlpatterns = [
     path('boardgames/<int:boardgame_id>/', views.boardgame, name='boardgame'),
     path('new_boardgame/', views.new_boardgame, name='new_boardgame'),
     path('new_loan/', views.new_loan, name='new_loan'),
+    path('loaned-games/', views.loaned_games, name='loaned_games'),
 ]
