@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.utils import timezone
 from .models import BoardGame, Loan
 from .forms import BoardgameForm, LoanForm
 
@@ -43,6 +44,7 @@ def new_loan(request):
     if request.method == 'POST':
         form = LoanForm(request.POST)
         if form.is_valid():
+            loan_date = timezone.now().date()
             game_id = form.cleaned_data['game']
             game = BoardGame.objects.get(id=game_id)
             
@@ -52,7 +54,7 @@ def new_loan(request):
                 if game.loaned:
                     messages.error(request, f"The game {game.name} is already loaned!")
                 else:
-                    loan = Loan(user=user, game=game)
+                    loan = Loan(user=user, game=game, loan_date=loan_date)
                     loan.save()
                     game.loaned = True
                     game.save()
